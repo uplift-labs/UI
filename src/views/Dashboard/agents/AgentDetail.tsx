@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Loader2 } from 'lucide-react'
 import { useAgentStore } from '@/store/agentStore'
+import { Spinner } from '@/components/ui/spinner'
 import { useAgentPlatform } from './hooks/useAgentPlatform'
 import { downloadBuildFile, downloadAgentData } from '@/services/dashboard/hub/agentDownloadService'
 import {
@@ -124,7 +124,7 @@ export const AgentDetail: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 className="animate-spin text-foreground/60" size={24} />
+        <Spinner size="md" />
       </div>
     )
   }

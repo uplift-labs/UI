@@ -127,35 +127,35 @@ export const MessageList: React.FC = () => {
   }
 
   return (
-    <div ref={scrollAreaRef} className='h-[calc(100vh-200px)]'>
-      <ScrollArea className='h-full'>
-        <div className="flex-1 p-8 h-full mx-auto md:max-w-3xl 2xl:max-w-5xl rounded-lg flex flex-col gap-6">
-        {/* Render all completed messages */}
-        {messages.map((msg, i) => {
-          const parsed = parsedMessages[i] || { text: msg.text, toolId: null }
-          return (
-            <MessageBubble
-              key={i}
-              role={msg.role as 'user' | 'assistant'}
-              text={parsed.text}
-              toolId={parsed.toolId}
-              responseStyle={parsed.responseStyle}
+    <div ref={scrollAreaRef} className="flex-1 min-h-0 overflow-hidden">
+      <ScrollArea className="h-full">
+        <div className="px-4 py-6 sm:px-6 sm:py-8 mx-auto max-w-2xl lg:max-w-3xl flex flex-col gap-4 sm:gap-5">
+          {/* Render all completed messages */}
+          {messages.map((msg, i) => {
+            const parsed = parsedMessages[i] || { text: msg.text, toolId: null }
+            return (
+              <MessageBubble
+                key={i}
+                role={msg.role as 'user' | 'assistant'}
+                text={parsed.text}
+                toolId={parsed.toolId}
+                responseStyle={parsed.responseStyle}
+              />
+            )
+          })}
+
+          {/* Render streaming message separately */}
+          {streamingMessage !== null && (
+            <StreamingMessage 
+              content={streamingMessage} 
+              isLoading={isLoading}
             />
-          )
-        })}
+          )}
 
-        {/* Render streaming message separately */}
-        {streamingMessage !== null && (
-          <StreamingMessage 
-            content={streamingMessage} 
-            isLoading={isLoading}
-          />
-        )}
+          {/* Show "Thinking..." only if streaming hasn't started yet */}
+          {isLoading && streamingMessage === null && <ThinkingIndicator />}
 
-        {/* Show "Thinking..." only if streaming hasn't started yet */}
-        {isLoading && streamingMessage === null && <ThinkingIndicator />}
-
-        <div ref={messagesEndRef} />
+          <div ref={messagesEndRef} className="h-2" />
         </div>
       </ScrollArea>
     </div>

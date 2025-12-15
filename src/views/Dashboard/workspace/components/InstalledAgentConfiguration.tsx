@@ -4,7 +4,8 @@ import { readAgentFiles } from '@/services/dashboard/workspace/agentFileService'
 import { saveAgentConfiguration } from '@/services/dashboard/workspace/agentConfigurationService'
 import { Button } from '@/components/ui/button'
 import { EditableField, EditableFieldConfig } from '@/components/ui/editable-field'
-import { Loader2, Save } from 'lucide-react'
+import { Spinner, ButtonSpinner } from '@/components/ui/spinner'
+import { Save } from 'lucide-react'
 import { InstalledAgentRefresh } from './InstalledAgentRefresh'
 
 interface InstalledAgentConfigurationProps {
@@ -91,8 +92,8 @@ export const InstalledAgentConfiguration: React.FC<InstalledAgentConfigurationPr
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-8">
-        <Loader2 className="animate-spin text-foreground/60" size={24} />
+      <div className="flex items-center justify-center py-12">
+        <Spinner size="md" />
       </div>
     )
   }
@@ -124,7 +125,7 @@ export const InstalledAgentConfiguration: React.FC<InstalledAgentConfigurationPr
         >
           {saving ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <ButtonSpinner />
               Saving...
             </>
           ) : (

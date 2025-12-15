@@ -1,15 +1,17 @@
-import React, { useState } from 'react'
-import { Button } from '@/components/ui/button'
+import React, { useState, CSSProperties } from 'react'
 import { Agent } from '@/services/dashboard/hub/agentService'
+import { ChevronRight } from 'lucide-react'
 
 interface AgentCardProps {
   agent: Agent
   onSelectAgent: (agent: Agent) => void
+  style?: CSSProperties
 }
 
 export const AgentCard: React.FC<AgentCardProps> = ({
   agent,
-  onSelectAgent
+  onSelectAgent,
+  style
 }) => {
   const [imageError, setImageError] = useState(false)
   
@@ -21,10 +23,14 @@ export const AgentCard: React.FC<AgentCardProps> = ({
   const description = agent.builds?.[0]?.description || agent.author || 'Agent by ' + agent.author
 
   return (
-    <div onClick={handleView} className="group cursor-pointer py-4 flex flex-col gap-2 hover:px-6 rounded-xl hover:bg-foreground/5 transition-all duration-200">
-      <div className="flex items-start justify-between gap-3">
+    <div 
+      onClick={handleView} 
+      className="group cursor-pointer p-4 flex flex-col gap-3 rounded-xl border border-foreground/5 bg-foreground/[0.02] hover:bg-foreground/5 hover:border-foreground/10 transition-all duration-300 animate-fade-in opacity-0 [animation-fill-mode:forwards]"
+      style={style}
+    >
+      <div className="flex items-start gap-3">
         {/* Logo */}
-        <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-foreground/5 p-2 border border-foreground/10 flex items-center justify-center overflow-hidden">
+        <div className="flex-shrink-0 w-11 h-11 rounded-lg bg-gradient-to-br from-foreground/10 to-foreground/5 p-2 border border-foreground/10 flex items-center justify-center overflow-hidden group-hover:border-primary/30 transition-colors">
           {agent.logo_url && !imageError ? (
             <img 
               src={agent.logo_url} 
@@ -33,19 +39,37 @@ export const AgentCard: React.FC<AgentCardProps> = ({
               onError={() => setImageError(true)}
             />
           ) : (
-            <div className="text-foreground/30 text-xl font-bold">
+            <div className="text-foreground/40 text-lg font-semibold">
               {agent.name.charAt(0).toUpperCase()}
             </div>
           )}
         </div>
         
         {/* Content */}
-        <div className="space-y-1 w-full min-w-0">
-          <h3 className="text-lg line-clamp-1">{agent.name}</h3>
-          <p className="text-xs text-foreground/60 line-clamp-2">{description}</p>
+        <div className="flex-1 min-w-0 space-y-1">
+          <h3 className="text-base font-medium text-foreground line-clamp-1 group-hover:text-primary transition-colors">
+            {agent.name}
+          </h3>
+          <p className="text-xs text-foreground/50 line-clamp-2 leading-relaxed">
+            {description}
+          </p>
         </div>
+
+        {/* Arrow indicator */}
+        <ChevronRight 
+          size={18} 
+          className="flex-shrink-0 text-foreground/20 group-hover:text-primary group-hover:translate-x-0.5 transition-all mt-0.5" 
+        />
       </div>
-      <Button variant="link" className="w-fit group-hover:underline tracking-wider text-primary p-0">View</Button>
+
+      {/* Author tag */}
+      {agent.author && (
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] uppercase tracking-wider text-foreground/30 font-medium">
+            by {agent.author}
+          </span>
+        </div>
+      )}
     </div>
   )
 }

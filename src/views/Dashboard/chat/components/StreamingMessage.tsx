@@ -11,13 +11,11 @@ export const StreamingMessage: React.FC<StreamingMessageProps> = ({
   isLoading 
 }) => {
   return (
-    <div className="flex justify-start">
-      <div className="px-4 flex items-center flex-wrap py-2 rounded-lg max-w-xl relative">
-        <div className="flex-1">
-          <MarkdownMessage content={content} />
-        </div>
+    <div className="flex justify-start animate-fade-in">
+      <div className="max-w-[90%] sm:max-w-[80%] px-3 py-2 sm:px-4 sm:py-2.5 rounded-2xl rounded-bl-md bg-foreground/[0.04] border border-foreground/5 text-foreground/90 backdrop-blur-sm">
+        <MarkdownMessage content={content} />
         {isLoading && (
-          <span className="inline-block w-1 h-4 ml-1 bg-foreground/50 animate-pulse" />
+          <span className="inline-block w-0.5 h-4 ml-1 bg-gradient-to-t from-primary to-accent animate-pulse rounded-full align-middle" />
         )}
       </div>
     </div>

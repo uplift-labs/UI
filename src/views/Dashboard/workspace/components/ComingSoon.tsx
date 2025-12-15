@@ -6,7 +6,7 @@ export const WorkspaceComingSoon: React.FC = () => {
     { 
       icon: Shield, 
       label: 'Isolated Context', 
-      desc: 'session based context' 
+      desc: 'Session based context' 
     },
     { 
       icon: Download, 
@@ -46,37 +46,46 @@ export const WorkspaceComingSoon: React.FC = () => {
   ]
 
   return (
-    <div className="flex max-w-5xl justify-center mx-auto relative z-10 flex-col h-full rounded-lg p-6 gap-4">
-      <div className="flex items-start justify-between mb-4">
+    <div className="flex flex-col h-full w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <h2 className="text-4xl">Workspace</h2>
-            <Sparkles size={20} className="text-primary animate-pulse" />
+            <h2 className="text-2xl sm:text-3xl font-semibold text-foreground tracking-tight">
+              Work<span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">space</span>
+            </h2>
+            <Sparkles size={18} className="text-accent" />
           </div>
-          <p className="text-sm text-foreground/60">
+          <p className="text-sm text-foreground/40">
             Your command center for agent orchestration
           </p>
         </div>
-        <span className="px-2.5 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-sm">
+        <span className="px-3 py-1.5 rounded-full text-xs font-semibold bg-gradient-to-r from-primary to-accent text-primary-foreground shadow-lg shadow-primary/20">
           Coming Soon
         </span>
       </div>
 
-      <div className="grid grid-cols-4 gap-3">
+      {/* Features Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {features.map((feature, i) => {
           const Icon = feature.icon
           return (
             <div 
               key={i} 
-              className="group relative p-4 rounded-lg border border-foreground/5 bg-foreground/[0.01] hover:border-primary/20 hover:bg-primary/5 transition-all duration-200 cursor-default"
+              className="group relative p-4 rounded-xl border border-foreground/5 bg-foreground/[0.02] hover:border-primary/20 hover:bg-foreground/5 transition-all duration-300 cursor-default animate-fade-in opacity-0 [animation-fill-mode:forwards]"
+              style={{ animationDelay: `${i * 50}ms` }}
             >
-              <div className="flex flex-col items-center text-center gap-2">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                  <Icon size={18} className="text-primary" />
+              <div className="flex flex-col items-center text-center gap-3">
+                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-primary/15 to-accent/15 border border-primary/10 flex items-center justify-center group-hover:scale-110 group-hover:border-primary/30 transition-all duration-300">
+                  <Icon size={20} className="text-primary" />
                 </div>
-                <div>
-                  <h3 className="text-sm text-foreground mb-0.5">{feature.label}</h3>
-                  <p className="text-xs text-foreground/50 leading-tight">{feature.desc}</p>
+                <div className="space-y-0.5">
+                  <h3 className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+                    {feature.label}
+                  </h3>
+                  <p className="text-xs text-foreground/40 leading-relaxed">
+                    {feature.desc}
+                  </p>
                 </div>
               </div>
             </div>
@@ -84,10 +93,26 @@ export const WorkspaceComingSoon: React.FC = () => {
         })}
       </div>
 
-      <div className="mt-4 pt-4 border-t border-foreground/5">
-        <p className="text-xs text-center text-foreground/40">
-          Build powerful workflows • Complete privacy • Full control • All local
-        </p>
+      {/* Footer */}
+      <div className="mt-auto pt-8">
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-xs text-foreground/30">
+          <span className="flex items-center gap-1.5">
+            <div className="w-1 h-1 rounded-full bg-primary" />
+            Build powerful workflows
+          </span>
+          <span className="flex items-center gap-1.5">
+            <div className="w-1 h-1 rounded-full bg-accent" />
+            Complete privacy
+          </span>
+          <span className="flex items-center gap-1.5">
+            <div className="w-1 h-1 rounded-full bg-primary" />
+            Full control
+          </span>
+          <span className="flex items-center gap-1.5">
+            <div className="w-1 h-1 rounded-full bg-accent" />
+            All local
+          </span>
+        </div>
       </div>
     </div>
   )

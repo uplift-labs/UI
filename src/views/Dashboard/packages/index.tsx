@@ -4,7 +4,7 @@ import { ProjectWelcome } from './components/ProjectWelcome'
 import { ProjectError } from './components/ProjectError'
 import { SessionChat } from './components/SessionChat'
 import { useProjectStore } from '@/store/projectStore'
-import { Loader2 } from 'lucide-react'
+import { Spinner } from '@/components/ui/spinner'
 
 export function Packages() {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null)
@@ -123,7 +123,7 @@ export function Packages() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 className="animate-spin text-foreground/60" size={24} />
+        <Spinner size="md" />
       </div>
     )
   }

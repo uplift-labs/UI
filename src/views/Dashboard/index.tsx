@@ -8,7 +8,6 @@ import { links } from "@/config/static"
 import { Agent } from '@/services/dashboard/hub/agentService'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
-
 function Dashboard({ id = links[0].href }: { id?: string }) {
   const { id: agentId } = useParams()
   const navigate = useNavigate()
@@ -18,54 +17,37 @@ function Dashboard({ id = links[0].href }: { id?: string }) {
     navigate(`/store/${agent.id}`)
   }
 
-  // Check if we're on an agent detail page (store route)
-  if (agentId && id === '/store') {
-    return (
-      <div className="h-screen flex flex-col">
-        <ScrollArea className="h-[89vh]">
+  // Get the current view component
+  const getCurrentContent = () => {
+    // Check if we're on an agent detail page (store route)
+    if (agentId && id === '/store') {
+      return (
+        <ScrollArea className="h-full">
           <AgentDetail />
         </ScrollArea>
-        <div className='h-[11vh] relative z-10 border-t'>
-          <Dock />
-        </div>
-      </div>
-    )
-  }
+      )
+    }
 
-  // Show Hub for /store route (marketplace)
-  if (id === '/store') {
-    return (
-      <div className="h-screen flex flex-col">
-        <div className="h-[89vh]">
-          <Hub onSelectAgent={handleSelectAgent} />
-        </div>
-        <div className='h-[11vh] relative z-10 border-t'>
-          <Dock />
-        </div>
-      </div>
-    )
-  }
+    // Show Hub for /store route (marketplace)
+    if (id === '/store') {
+      return <Hub onSelectAgent={handleSelectAgent} />
+    }
 
-  // Handle voice chat route
-  // if (id === '/voicechat') {
-  //   return (
-  //     <div className="h-screen flex flex-col">
-  //       <div className="h-[89vh]">
-  //         <VoiceChat />
-  //       </div>
-  //       <div className='h-[11vh] relative z-10 border-t'>
-  //         <Dock />
-  //       </div>
-  //     </div>
-  //   )
-  // }
+    // Default: render the component from links
+    return links.find((view) => view.href === id)?.component
+  }
 
   return (
-    <div className="h-[calc(100vh-32px)] flex flex-col">
-      <div className="h-full border-b">
-        {links.find((view) => view.href === id)?.component}
+    <div className="h-[calc(100vh-32px)] flex flex-row">
+      {/* Vertical Dock on Left */}
+      <div className="flex-shrink-0 border-r border-foreground/5 bg-background/50 backdrop-blur-sm">
+        <Dock />
       </div>
-      <Dock />
+      
+      {/* Main Content Area */}
+      <div className="flex-1 min-w-0 overflow-hidden">
+        {getCurrentContent()}
+      </div>
     </div>
   )
 }

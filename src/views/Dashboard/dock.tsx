@@ -7,10 +7,11 @@ export function Dock() {
   const navigate = useNavigate();
   
   return (
-    <div className='flex relative z-50 h-fit items-center justify-center gap-2'>
+    <div className="flex items-start justify-center h-full w-14 px-2 pt-4">
       <FloatingDock
         onClick={navigate}
         items={links}
+        vertical
       />
     </div>
   );

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
-import { RefreshCw, Loader2 } from 'lucide-react'
+import { RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { ButtonSpinner } from '@/components/ui/spinner'
 import { Agent } from '@/services/dashboard/hub/agentService'
 import { downloadAgentData } from '@/services/dashboard/hub/agentDownloadService'
 
@@ -48,7 +49,7 @@ export const InstalledAgentRefresh: React.FC<InstalledAgentRefreshProps> = ({
       >
         {isRefreshing ? (
           <>
-            <Loader2 size={16} className="mr-2 animate-spin" />
+            <ButtonSpinner className="mr-2" />
             Resetting...
           </>
         ) : (

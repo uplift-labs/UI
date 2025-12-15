@@ -1,6 +1,7 @@
 import React from 'react'
-import { Trash2, Loader2 } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { ButtonSpinner } from '@/components/ui/spinner'
 
 interface InstalledAgentUninstallProps {
   agentName: string
@@ -33,7 +34,7 @@ export const InstalledAgentUninstall: React.FC<InstalledAgentUninstallProps> = (
       >
         {isUninstalling ? (
           <>
-            <Loader2 size={16} className="mr-2 animate-spin" />
+            <ButtonSpinner className="mr-2" />
             Uninstalling...
           </>
         ) : (

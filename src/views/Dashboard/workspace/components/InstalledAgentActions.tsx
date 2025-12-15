@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { Loader2 } from 'lucide-react'
+import { Spinner, ButtonSpinner } from '@/components/ui/spinner'
 
 import { Agent } from '@/services/dashboard/hub/agentService'
 import { readAgentFilesWithCommands } from '@/services/dashboard/workspace/installAgentCommandService'
@@ -87,8 +87,8 @@ export const InstalledAgentActions: React.FC<InstalledAgentActionsProps> = ({
     if (isLoading) {
         return (
             <div className="pt-4 border-t border-foreground/10">
-                <div className="flex items-center justify-center py-4">
-                    <Loader2 className="animate-spin text-foreground/60" size={20} />
+                <div className="flex items-center justify-center py-8">
+                    <Spinner size="md" />
                 </div>
             </div>
         )
@@ -117,7 +117,7 @@ export const InstalledAgentActions: React.FC<InstalledAgentActionsProps> = ({
                         >
                             {isExecuting === 'setup' ? (
                                 <>
-                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                    <ButtonSpinner className="mr-2" />
                                     Running...
                                 </>
                             ) : (

@@ -4,13 +4,18 @@ import { SendInput, MessageList } from './components'
 
 export function Chat() {
   return (
-    <>
-      <div className="flex relative pb-4 z-10 pt-4 flex-col h-full gap-2">
+    <div className="relative h-full w-full flex flex-col overflow-hidden">
+      {/* Background Beams - behind everything */}
+      <div className="absolute inset-0 pointer-events-none">
+        <BackgroundBeams className="opacity-40" />
+      </div>
+    
+      {/* Content */}
+      <div className="relative z-10 flex flex-col flex-1 min-h-0 py-4">
         <MessageList />
         <SendInput />
       </div>
-      <BackgroundBeams />
-    </>
+    </div>
   )
 }
 

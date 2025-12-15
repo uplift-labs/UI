@@ -14,18 +14,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   placeholder = "Search agents..."
 }) => {
   return (
-
-    <div className='w-1/3'>
+    <div className="w-full sm:w-64 lg:w-80">
       <Input
-        leftIcon={<Search size={14} className="text-foreground/60" />}
+        leftIcon={<Search size={16} className="text-foreground/40" />}
         type="text"
         placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full h-12 text-xl"
+        className="w-full h-10 text-sm bg-foreground/5 border-foreground/10 focus:border-primary/50 focus:bg-foreground/[0.08] transition-all placeholder:text-foreground/30"
       />
     </div>
-
   )
 }
 

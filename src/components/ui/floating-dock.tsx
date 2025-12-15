@@ -18,15 +18,17 @@ export const FloatingDock = ({
   desktopClassName,
   mobileClassName,
   onClick,
+  vertical = false,
 }: {
   items: { title: string; icon: React.ReactNode; href: string }[];
   desktopClassName?: string;
   mobileClassName?: string;
   onClick: NavigateFunction;
+  vertical?: boolean;
 }) => {
   return (
     <>
-      <FloatingDockDesktop onClick={onClick} items={items} className={desktopClassName} />
+      <FloatingDockDesktop onClick={onClick} items={items} className={desktopClassName} vertical={vertical} />
     </>
   );
 };
@@ -35,111 +37,76 @@ const FloatingDockDesktop = ({
   items,
   className,
   onClick,
+  vertical = false,
 }: {
   items: { title: string; icon: React.ReactNode; href: string }[];
   className?: string;
   onClick: NavigateFunction;
+  vertical?: boolean;
 }) => {
-  let mouseX = useMotionValue(Infinity);
+  let mousePos = useMotionValue(Infinity);
+  
   return (
-    <motion.div
-      onMouseMove={(e) => mouseX.set(e.pageX)}
-      onMouseLeave={() => mouseX.set(Infinity)}
+    <div
       className={cn(
-        "w-full h-16 justify-center items-end gap-4 pb-3 md:flex backdrop-blur-sm ",
+        "flex items-start gap-2",
+        vertical ? "flex-col" : "flex-row",
         className,
       )}
     >
       {items.map((item) => (
-        <IconContainer onClick={onClick} mouseX={mouseX} key={item.title} {...item} />
+        <IconContainer 
+          onClick={onClick} 
+          mousePos={mousePos} 
+          key={item.title} 
+          vertical={vertical}
+          {...item} 
+        />
       ))}
-    </motion.div>
+    </div>
   );
 };
 
 function IconContainer({
-  mouseX,
+  mousePos,
   title,
   icon,
   href,
   onClick,
+  vertical = false,
 }: {
-  mouseX: MotionValue;
+  mousePos: MotionValue;
   title: string;
   icon: React.ReactNode;
   href: string;
   onClick: NavigateFunction;
+  vertical?: boolean;
 }) {
-  let ref = useRef<HTMLDivElement>(null);
-
-  let distance = useTransform(mouseX, (val) => {
-    let bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
-
-    return val - bounds.x - bounds.width / 2;
-  });
-
-  let widthTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40]);
-  let heightTransform = useTransform(distance, [-150, 0, 150], [40, 80, 40]);
-
-  let widthTransformIcon = useTransform(distance, [-150, 0, 150], [20, 40, 20]);
-  let heightTransformIcon = useTransform(
-    distance,
-    [-150, 0, 150],
-    [20, 40, 20],
-  );
-
-  let width = useSpring(widthTransform, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-  let height = useSpring(heightTransform, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-
-  let widthIcon = useSpring(widthTransformIcon, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-  let heightIcon = useSpring(heightTransformIcon, {
-    mass: 0.1,
-    stiffness: 150,
-    damping: 12,
-  });
-
   const [hovered, setHovered] = useState(false);
 
   return (
     <a href={href} onClick={(e) => { e.preventDefault(); onClick(href) }}>
-      <motion.div
-        ref={ref}
-        style={{ width, height }}
+      <div
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="relative group flex border aspect-square items-center justify-center rounded-full bg-muted"
+        className="relative group flex w-10 h-10 border border-foreground/10 aspect-square items-center justify-center rounded-xl bg-foreground/5 hover:bg-foreground/10 hover:border-primary/30 transition-all duration-200 hover:scale-105"
       >
         <AnimatePresence>
           {hovered && (
             <motion.div
-              initial={{ opacity: 0, y: 10, x: "-50%" }}
-              animate={{ opacity: 1, y: 0, x: "-50%" }}
-              exit={{ opacity: 0, y: 2, x: "-50%" }}
-              className="absolute -top-8 left-1/2 w-fit rounded-md border px-2 py-0.5 text-xs whitespace-pre bg-muted"
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 5 }}
+              className="absolute left-full ml-3 top-1/2 -translate-y-1/2 w-fit rounded-lg border border-foreground/10 px-2.5 py-1 text-xs whitespace-pre bg-background/95 backdrop-blur-sm shadow-lg z-50"
             >
               {title}
             </motion.div>
           )}
         </AnimatePresence>
-        <motion.div
-          style={{ width: widthIcon, height: heightIcon }}
-          className="flex items-center justify-center"
-        >
+        <div className="flex items-center justify-center w-5 h-5 text-foreground/60 group-hover:text-primary transition-colors">
           {icon}
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </a>
   );
 }

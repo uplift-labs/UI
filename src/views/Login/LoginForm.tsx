@@ -3,7 +3,8 @@ import { UseFormRegister, FieldErrors } from 'react-hook-form'
 import { LoginFormData } from '@/models/auth'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Mail, Lock, Loader2, ArrowRight } from 'lucide-react'
+import { ButtonSpinner } from '@/components/ui/spinner'
+import { Mail, Lock, ArrowRight } from 'lucide-react'
 
 interface LoginFormProps {
   register: UseFormRegister<LoginFormData>
@@ -64,7 +65,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
       >
         {isLoading ? (
           <>
-            <Loader2 size={16} className="animate-spin" />
+            <ButtonSpinner />
             <span>Signing in...</span>
           </>
         ) : (

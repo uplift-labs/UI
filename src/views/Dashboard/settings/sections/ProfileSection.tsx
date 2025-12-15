@@ -121,7 +121,7 @@ export const ProfileSection: React.FC = () => {
   }
 
   return (
-    <div className="space-y-8 mx-auto flex flex-col justify-center h-full max-w-2xl">
+    <div className="space-y-8 mx-auto max-w-2xl pb-8">
       {/* Profile Information Section */}
       <div className="space-y-6">
         <div>

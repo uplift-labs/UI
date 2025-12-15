@@ -3,9 +3,10 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { getUserInstalledAgentsWithDetails, InstalledAgentWithDetails } from '@/services/dashboard/workspace/installedAgentsService'
 import { InstalledAgentSidebar } from './InstalledAgentSidebar'
 import { InstalledAgentDetail } from './InstalledAgentDetail'
-import { Loader2 } from 'lucide-react'
+import { AlertCircle, RefreshCw, Store, Package, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { Spinner } from '@/components/ui/spinner'
 
 export const WorkspaceContent: React.FC = () => {
   const navigate = useNavigate()
@@ -74,12 +75,69 @@ export const WorkspaceContent: React.FC = () => {
     setSelectedAgentId(null)
   }
 
+  const hasAgents = installedAgents.length > 0
+
+  // Loading state - full width
+  if (isLoading) {
+    return (
+      <div className="flex w-full h-full bg-background items-center justify-center">
+        <Spinner size="lg" label="Loading workspace" sublabel="Fetching your agents..." />
+      </div>
+    )
+  }
+
+  // Error state - full width
+  if (error) {
+    return (
+      <div className="flex w-full h-full bg-background items-center justify-center p-8">
+        <div className="text-center space-y-5 max-w-sm">
+          <div className="w-16 h-16 mx-auto rounded-2xl bg-destructive/10 flex items-center justify-center">
+            <AlertCircle className="text-destructive" size={32} />
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-xl font-semibold text-foreground">Unable to Load Agents</h2>
+            <p className="text-sm text-foreground/50 leading-relaxed">{error}</p>
+          </div>
+          <Button onClick={fetchInstalledAgents} variant="default" className="gap-2">
+            <RefreshCw size={16} />
+            Try Again
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  // No agents - full width empty state
+  if (!hasAgents) {
+    return (
+      <div className="flex w-full h-full bg-background items-center justify-center p-8">
+        <div className="text-center space-y-6 max-w-md">
+          <div className="relative mx-auto w-20 h-20">
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 blur-xl animate-pulse" />
+            <div className="relative w-full h-full rounded-2xl bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20 flex items-center justify-center">
+              <Package size={32} className="text-primary" />
+            </div>
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-2xl font-semibold text-foreground">No Agents Installed</h2>
+            <p className="text-sm text-foreground/50 leading-relaxed">
+              Get started by browsing the Uplift Store and installing your first agent.
+            </p>
+          </div>
+          <Button onClick={handleNavigateToStore} variant="default" className="gap-2">
+            <Sparkles size={16} />
+            Explore Uplift Store
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
+  // Has agents - show sidebar + content
   return (
-    <div className="flex w-full h-full">
-      {/* Sidebar */}
-      <div style={{
-        width: '300px'
-      }} className="w-[25vw] border-r border-foreground/10">
+    <div className="flex w-full h-full bg-background">
+      {/* Sidebar - only shown when there are agents */}
+      <div className="w-52 lg:w-56 flex-shrink-0 border-r border-foreground/5 bg-foreground/[0.01]">
         <InstalledAgentSidebar
           onNavigateToStore={handleNavigateToStore}
           installedAgents={installedAgents}
@@ -89,44 +147,26 @@ export const WorkspaceContent: React.FC = () => {
         />
       </div>
 
-      <ScrollArea className="h-full w-full">
-        {/* Main Content */}
-        {isLoading ? (
-          <div className="flex items-center justify-center h-full">
-            <Loader2 className="animate-spin text-foreground/60" size={24} />
-          </div>
-        ) : error ? (
-          <div className="flex flex-col items-center justify-center h-full p-8">
-            <div className="text-center space-y-4 max-w-md">
-              <h2 className="text-2xl font-semibold text-foreground">Unable to Load Agents</h2>
-              <p className="text-sm text-foreground/60">
-                {error}
-              </p>
-              <Button onClick={fetchInstalledAgents} variant="default">
-                Try Again
-              </Button>
-            </div>
-          </div>
-        ) : selectedInstalledAgent ? (
-          <InstalledAgentDetail
-            installedAgent={selectedInstalledAgent}
-            onBack={handleBack}
-            onUninstall={fetchInstalledAgents}
-          />
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col min-w-0 h-full">
+        {selectedInstalledAgent ? (
+          <ScrollArea className="h-full">
+            <InstalledAgentDetail
+              installedAgent={selectedInstalledAgent}
+              onBack={handleBack}
+              onUninstall={fetchInstalledAgents}
+            />
+          </ScrollArea>
         ) : (
-          <div className="flex flex-col items-center justify-center h-full p-8">
-            <div className="text-center space-y-4 max-w-md">
-              <h2 className="text-2xl font-semibold text-foreground">No Agent Selected</h2>
-              <p className="text-sm text-foreground/60">
-                Select an agent from the sidebar to view its details, or install new agents from the Uplift Store.
+          <div className="flex-1 flex items-center justify-center p-8">
+            <div className="text-center space-y-4 max-w-sm">
+              <p className="text-sm text-foreground/50">
+                Select an agent from the sidebar to view details
               </p>
-              <Button onClick={handleNavigateToStore} variant="default">
-                Browse Uplift Store
-              </Button>
             </div>
           </div>
         )}
-      </ScrollArea>
+      </div>
     </div>
   )
 }
